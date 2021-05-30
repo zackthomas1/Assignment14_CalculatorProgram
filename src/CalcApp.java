@@ -12,7 +12,6 @@ import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.control.TextField;
-import javafx.event.EventHandler;
 import javafx.scene.input.KeyEvent;
 
 public class CalcApp extends Application {
@@ -208,7 +207,7 @@ public class CalcApp extends Application {
 		masterPane.add(inputsPane, 0, 2); // column=0 row=2
 		// create scene
 		Scene scene = new Scene(masterPane, scene_width, scene_height);
-		scene.setOnKeyPressed(e -> {KeyboardIput(e, display);});
+		scene.setOnKeyPressed(e -> {KeyboardInput(e, display);});
 		scene.getStylesheets().add("Style.css");
 		
 		// create stage
@@ -218,7 +217,11 @@ public class CalcApp extends Application {
 		primaryStage.show();
 	}
 	
-	public void KeyboardIput(KeyEvent event, TextField display)
+	
+	
+	// methods
+	// -------------------
+	public void KeyboardInput(KeyEvent event, TextField display)
 	{
 		System.out.println("CalcApp::handle(KeyEvent event) -> event.getCode: " + event.getCode());
 		// Key events
@@ -284,6 +287,7 @@ public class CalcApp extends Application {
 		case DIVIDE: 
 			OperatorButtonPressed(Operator.Division);
 			break; 
+
 		case BACK_SPACE: 
 			DeleteButtonPressed(display);
 			break;
@@ -294,10 +298,7 @@ public class CalcApp extends Application {
 			break;
 			
 		}
-	};
-	
-	// methods
-	// -------------------
+	}
 	
 	public void UpdateDisplay(TextField display) 
 	{

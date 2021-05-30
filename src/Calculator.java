@@ -1,3 +1,10 @@
+/*
+ * Zachary n Thomas 
+ * CS/IS 139
+ * Assignment 12
+ */
+
+
 import java.util.ArrayList;
 
 public class Calculator {
@@ -54,7 +61,7 @@ public class Calculator {
 		}
 	}
 	
-	private int ConvertDigitstoValue(ArrayList<Integer> input_digits_list, int sign) 
+	private int DigitstoValue(ArrayList<Integer> input_digits_list, int sign) 
 	{
 		
 		int converted_value = 0;
@@ -69,16 +76,31 @@ public class Calculator {
 		return converted_value;
 	}
 	
+	private ArrayList<Integer> ValuetoDigit(int operandValue) 
+	{
+		ArrayList<Integer> outputArray = new ArrayList<Integer>();
+		
+		String strValue = String.valueOf(operandValue);
+		
+		for(int c = 0; c < strValue.length(); c++)
+		{
+			outputArray.add(Integer.parseInt(Character.toString(strValue.charAt(c))));
+		}
+	
+		System.out.print("Calculator::ValuetoDigit -> digit: "); outputArray.forEach(d -> System.out.print(d + ", ")); System.out.println();
+		return outputArray;
+	}
+	
 	public int ConvertLeftOperand() 
 	{
-		int convertedValue = ConvertDigitstoValue(this.input_digits_left_operand, this.left_sign); 
+		int convertedValue = DigitstoValue(this.input_digits_left_operand, this.left_sign); 
 		System.out.println("Calculator::ConvertLeftOperand -> left operand: " + convertedValue);
 		return convertedValue; 
 	}
 	
 	public int ConvertRightOperand()
 	{
-		int convertedValue = ConvertDigitstoValue(this.input_digits_right_operand, this.right_sign);
+		int convertedValue = DigitstoValue(this.input_digits_right_operand, this.right_sign);
 		System.out.println("Calculator::ConvertRightOperand -> right operand: " + convertedValue);
 		return convertedValue;
 	}
@@ -157,10 +179,8 @@ public class Calculator {
 	public int SolveEquation()
 	{
 		
-		if (this.left_operand == 0)
-			this.left_operand = ConvertLeftOperand();
-		if (this.right_operand == 0)
-			this.right_operand = ConvertRightOperand(); 
+		this.left_operand = ConvertLeftOperand();
+		this.right_operand = ConvertRightOperand(); 
 			
 		int solution = 0;
 		switch(this.operator)
@@ -184,19 +204,30 @@ public class Calculator {
 			break;
 		}
 		
+		// Set for next round of input
 		this.solution = solution;
 		System.out.println("Calculator::SolveEquation-> solution: " + solution);
 		
-		int temp_left_sign = this.right_sign; 
-		int temp_left_operand = solution;
+		ArrayList<Integer> temp_input_digits_left_operand;
+		int temp_left_sign;
+		if(solution < 0)
+		{
+			temp_input_digits_left_operand = ValuetoDigit(-1 * solution);
+			temp_left_sign = -1;	
+		}
+		else
+		{
+			temp_left_sign = 1;
+			temp_input_digits_left_operand = ValuetoDigit(solution);	
+		}
 		
 		Clear(); 
 		this.left_sign = temp_left_sign; 
-		this.left_operand = temp_left_operand;
-		this.activeOperand = Operand.Right;
+		this.input_digits_left_operand = temp_input_digits_left_operand;
 		
 		return this.solution;
-
 	}
+	
+	
 	
 }
