@@ -18,7 +18,7 @@ public class Calculator {
 	
 	Calculator()
 	{
-		System.out.println("Initializing Caculator object"); 
+		System.out.println("Initializing Calculator object"); 
 	}
 	
 	public void IntegerArrayListToString(ArrayList<Integer> input_arraylist)

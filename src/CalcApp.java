@@ -15,10 +15,12 @@ import javafx.scene.control.TextField;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyEvent;
 
-public class CalcApp extends Application implements EventHandler<KeyEvent> {
+public class CalcApp extends Application {
 	
+	// Create instance of Calculator object
 	Calculator calculator = new Calculator();
 	
+
 	// Main Call 
 	// ---------
 	public static void main(String[] args)
@@ -36,14 +38,13 @@ public class CalcApp extends Application implements EventHandler<KeyEvent> {
 		// create pane 
 		GridPane inputsPane = new GridPane(); 	
 		GridPane masterPane = new GridPane(); 
-	
-		// Create Display
+		
+		// create Display
 		// ----------------
 		TextField display = new TextField("0");
 		display.setEditable(false);
 		display.setId("Display");
 		masterPane.add(display, 0, 0,3,1); // column=0 row=0
-		
 		
 		// create Number buttons
 		// ---------------------
@@ -207,72 +208,93 @@ public class CalcApp extends Application implements EventHandler<KeyEvent> {
 		masterPane.add(inputsPane, 0, 2); // column=0 row=2
 		// create scene
 		Scene scene = new Scene(masterPane, scene_width, scene_height);
-		scene.setOnKeyPressed(this);
+		scene.setOnKeyPressed(e -> {KeyboardIput(e, display);});
 		scene.getStylesheets().add("Style.css");
 		
 		// create stage
 		primaryStage.setTitle("Calc App");
+		//primaryStage.addEventHandler(KeyEvent.KEY_PRESSED, e -> {System.out.println(e);});
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
 	
-	@Override
-	public void handle(KeyEvent event)
+	public void KeyboardIput(KeyEvent event, TextField display)
 	{
+		System.out.println("CalcApp::handle(KeyEvent event) -> event.getCode: " + event.getCode());
 		// Key events
 		// -----------------
 		switch(event.getCode())
 		{
+		case NUMPAD0: 		
 		case DIGIT0:
 			NumericalButtonPressed(0, display);
 			break;
+		case NUMPAD1: 
 		case DIGIT1:
 			NumericalButtonPressed(1, display);
 			break;
+		case NUMPAD2: 
 		case DIGIT2:
 			NumericalButtonPressed(2, display);
 			break;
+		case NUMPAD3: 
 		case DIGIT3:
 			NumericalButtonPressed(3, display);
 			break;
+		case NUMPAD4: 
 		case DIGIT4:
 			NumericalButtonPressed(4, display);
 			break;
+		case NUMPAD5: 
 		case DIGIT5:
 			NumericalButtonPressed(5, display);
 			break;
+		case NUMPAD6: 
 		case DIGIT6:
 			NumericalButtonPressed(6, display);
 			break;
+		case NUMPAD7: 
 		case DIGIT7:
 			NumericalButtonPressed(7, display);
 			break;
+		case NUMPAD8: 
 		case DIGIT8:
 			NumericalButtonPressed(8, display);
 			break;
+		case NUMPAD9: 
 		case DIGIT9:
 			NumericalButtonPressed(9, display);
 			break;
+		case ENTER:
 		case EQUALS: 
-			break; 
+			EqualButtonPressed(display);
+			break;
+		case PLUS:
 		case ADD:
 			OperatorButtonPressed(Operator.Addition);
 			break;
+		case MINUS:
 		case SUBTRACT: 
 			OperatorButtonPressed(Operator.Subtraction);
 			break; 
 		case MULTIPLY:
 			OperatorButtonPressed(Operator.Multiplication);
 			break;
+		case QUOTE:
 		case DIVIDE: 
 			OperatorButtonPressed(Operator.Division);
 			break; 
+		case BACK_SPACE: 
+			DeleteButtonPressed(display);
+			break;
+		case DELETE: 
+			ClearButtonPressed(display);
+			break;
 		default: 
 			break;
 			
 		}
 	};
-	}
 	
 	// methods
 	// -------------------
