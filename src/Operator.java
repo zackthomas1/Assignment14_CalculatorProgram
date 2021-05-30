@@ -6,5 +6,6 @@ public enum Operator {
 	Subtraction,
 	Multiplication, 
 	Division,
+	Modulus,
 	
 }

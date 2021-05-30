@@ -12,46 +12,58 @@ import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.control.TextField;
-import javafx.scene.text.Text;
+import javafx.event.EventHandler;
+import javafx.scene.input.KeyEvent;
 
-
-public class CalcApp extends Application {
+public class CalcApp extends Application implements EventHandler<KeyEvent> {
 	
 	Calculator calculator = new Calculator();
+	
+	// Main Call 
+	// ---------
+	public static void main(String[] args)
+	{
+		System.out.println("CalcApp::main-> Opening Calc App");
+		launch(args); 
+	}
 
 	@Override
 	public void start(Stage primaryStage) throws Exception
 	{
 		int scene_width = 400; 
-		int scene_height = 500;
+		int scene_height = 600;
 		
 		// create pane 
-		GridPane pane = new GridPane(); 
+		GridPane inputsPane = new GridPane(); 	
+		GridPane masterPane = new GridPane(); 
 	
-		// 
-		Text display = new Text("0.0");
+		// Create Display
+		// ----------------
+		TextField display = new TextField("0");
+		display.setEditable(false);
 		display.setId("Display");
-		pane.add(display, 0, 0,3,1);
+		masterPane.add(display, 0, 0,3,1); // column=0 row=0
+		
 		
 		// create Number buttons
 		// ---------------------
 		//7-9 row 03
 		Button btn07 = new Button("7"); 
-		pane.add(btn07, 0, 1); // column=0 row=2
+		inputsPane.add(btn07, 0, 1); // column=0 row=1
 		btn07.setOnMouseClicked(e -> {
 			System.out.println("CalcApp::start-> btn07 pressed");
 			NumericalButtonPressed(7, display);
 		});
 		
 		Button btn08 = new Button("8"); 
-		pane.add(btn08, 1, 1); // column=1 row=2
+		inputsPane.add(btn08, 1, 1); // column=1 row=1
 		btn08.setOnMouseClicked(e -> {
 			System.out.println("CalcApp::start-> btn08 pressed");
 			NumericalButtonPressed(8, display);
 		});
 		
 		Button btn09 = new Button("9"); 
-		pane.add(btn09, 2, 1); // column=3 row=2
+		inputsPane.add(btn09, 2, 1); // column=2 row=1
 		btn09.setOnMouseClicked(e -> {
 			System.out.println("CalcApp::start-> btn09 pressed");
 			NumericalButtonPressed(9, display);
@@ -59,21 +71,21 @@ public class CalcApp extends Application {
 		
 		//4-6 row 02
 		Button btn04 = new Button("4"); 
-		pane.add(btn04, 0, 2); // column=0 row=1
+		inputsPane.add(btn04, 0, 2); // column=0 row=2
 		btn04.setOnMouseClicked(e -> {
 			System.out.println("CalcApp::start-> btn04 pressed");
 			NumericalButtonPressed(4, display);
 		});
 		
 		Button btn05 = new Button("5"); 
-		pane.add(btn05, 1, 2); // column=1 row=1
+		inputsPane.add(btn05, 1, 2); // column=1 row=2
 		btn05.setOnMouseClicked(e -> {
 			System.out.println("CalcApp::start-> btn05 pressed");
 			NumericalButtonPressed(5, display);
 		});
 		
 		Button btn06 = new Button("6"); 
-		pane.add(btn06, 2, 2); // column=3 row=1
+		inputsPane.add(btn06, 2, 2); // column=2 row=2
 		btn06.setOnMouseClicked(e -> {
 			System.out.println("CalcApp::start-> btn06 pressed");
 			NumericalButtonPressed(6, display);
@@ -81,92 +93,121 @@ public class CalcApp extends Application {
 		
 		//1-3 row 01
 		Button btn01 = new Button("1"); 
-		pane.add(btn01, 0, 3); // column=0 row=0
+		inputsPane.add(btn01, 0, 3); // column=0 row=3
 		btn01.setOnMouseClicked(e -> {
 			System.out.println("CalcApp::start-> btn01 pressed");
 			NumericalButtonPressed(1, display);
 		});
 		
 		Button btn02 = new Button("2"); 
-		pane.add(btn02, 1, 3); // column=1 row=0
+		inputsPane.add(btn02, 1, 3); // column=1 row=3
 		btn02.setOnMouseClicked(e -> {
 			System.out.println("CalcApp::start-> btn02 pressed");
 			NumericalButtonPressed(2, display);
 		});
 		
 		Button btn03 = new Button("3"); 
-		pane.add(btn03, 2, 3); // column=3 row=0
+		inputsPane.add(btn03, 2, 3); // column=2 row=3
 		btn03.setOnMouseClicked(e -> {
 			System.out.println("CalcApp::start-> btn03 pressed");
 			NumericalButtonPressed(3, display);
 		});
 		
 		// =, 0, '.'
+		// -----------------
 		Button btn00 = new Button("0"); 
-		pane.add(btn00, 0, 4); // column=0 row=0
+		inputsPane.add(btn00, 0, 4); // column = 0 row = 4
 		btn00.setOnMouseClicked(e -> {
 			System.out.println("CalcApp::start-> btn00 pressed");
 			NumericalButtonPressed(0, display);
 		});
 		
 		Button btnDecimal = new Button("."); 
-		pane.add(btnDecimal, 1, 4); // column=0 row=0
+		inputsPane.add(btnDecimal, 1, 4); // column=1 row = 4
 		btnDecimal.setOnMouseClicked(e -> {
 			System.out.println("CalcApp::start-> btnDecimal pressed");
 		});
 		
 		Button btnEqual = new Button("="); 
-		pane.add(btnEqual, 2, 4); // column=0 row=0
+		inputsPane.add(btnEqual, 2, 4); // column=2 row=4
 		btnEqual.setOnMouseClicked(e -> {
 			System.out.println("CalcApp::start-> btnEqual pressed");
 			EqualButtonPressed(display);
 		});
 		
-		//operator button
+		// system memory buttons
+		// -----------------
+		Button btnClear = new Button("C"); 
+		btnClear.setId("Operator");
+		inputsPane.add(btnClear, 0, 0); // column=0 row=0
+		btnClear.setOnMouseClicked(e -> {
+			System.out.println("CalcApp::start-> btnClear pressed");
+			ClearButtonPressed(display);
+		});	
+		
 		Button btnDelete = new Button("<-x"); 
 		btnDelete.setId("Operator");
-		pane.add(btnDelete, 4, 0); // column=0 row=2
+		inputsPane.add(btnDelete, 1, 0); // column=1 row=0
 		btnDelete.setOnMouseClicked(e -> {
 			System.out.println("CalcApp::start-> btnDelete pressed");
-			DeleteButtonPressed();
-		});
+			DeleteButtonPressed(display);
+		});	
 		
+		// operator button
+		// -----------------
+		
+		Button btnSign = new Button("-/+"); 
+		btnSign.setId("Operator");
+		inputsPane.add(btnSign, 2, 0); // column=2 row=0
+		btnSign.setOnMouseClicked(e -> {
+			System.out.println("CalcApp::start-> btnSign pressed");
+			SignButtonPressed(display);
+		});	
+		
+		Button btnMode = new Button("%"); 
+		btnMode.setId("Operator");
+		inputsPane.add(btnMode, 3, 0); // column=3 row=0
+		btnMode.setOnMouseClicked(e -> {
+			System.out.println("CalcApp::start-> btnMode pressed");
+			OperatorButtonPressed(Operator.Modulus);
+		});	
 		
 		Button btnDivide = new Button("/"); 
 		btnDivide.setId("Operator");
-		pane.add(btnDivide, 4, 1); // column=3 row=2
+		inputsPane.add(btnDivide, 3, 1); // column=3 row=2
 		btnDivide.setOnMouseClicked(e -> {
-			System.out.println("CalcApp::start-> btnEqual pressed");
+			System.out.println("CalcApp::start-> btnDivide pressed");
 			OperatorButtonPressed(Operator.Division);
 		});
 		
 		Button btnMultiply = new Button("X"); 
 		btnMultiply.setId("Operator");
-		pane.add(btnMultiply, 4, 2); // column=3 row=2
+		inputsPane.add(btnMultiply, 3, 2); // column=3 row=2
 		btnMultiply.setOnMouseClicked(e -> {
-			System.out.println("CalcApp::start-> btnEqual pressed");
+			System.out.println("CalcApp::start-> btnMultiply pressed");
 			OperatorButtonPressed(Operator.Multiplication);
 		});
 		
 		Button btnSubtract = new Button("-"); 
 		btnSubtract.setId("Operator");
-		pane.add(btnSubtract, 4, 3); // column=1 row=2
+		inputsPane.add(btnSubtract, 3, 3); // column=1 row=2
 		btnSubtract.setOnMouseClicked(e -> {
-			System.out.println("CalcApp::start-> btnEqual pressed");
+			System.out.println("CalcApp::start-> btnSubtract pressed");
 			OperatorButtonPressed(Operator.Subtraction);
 		});
 		
 		Button btnAdd = new Button("+"); 
 		btnAdd.setId("Operator");
-		pane.add(btnAdd, 4, 4); // column=0 row=2
+		inputsPane.add(btnAdd, 3, 4); // column=0 row=2
 		btnAdd.setOnMouseClicked(e -> {
-			System.out.println("CalcApp::start-> btnEqual pressed");
+			System.out.println("CalcApp::start-> btnAd pressed");
 			OperatorButtonPressed(Operator.Addition);
 		});
 		
-		
+		masterPane.add(inputsPane, 0, 2); // column=0 row=2
 		// create scene
-		Scene scene = new Scene(pane, scene_width, scene_height);
+		Scene scene = new Scene(masterPane, scene_width, scene_height);
+		scene.setOnKeyPressed(this);
 		scene.getStylesheets().add("Style.css");
 		
 		// create stage
@@ -175,14 +216,80 @@ public class CalcApp extends Application {
 		primaryStage.show();
 	}
 	
-	public void NumericalButtonPressed(int input_value, Text display)
+	@Override
+	public void handle(KeyEvent event)
 	{
-		System.out.println("CalcApp::NumericalButtonPressed -> calling Calculator::AddOperatorDigit method");
-		calculator.AddOperatorDigit(input_value);
+		// Key events
+		// -----------------
+		switch(event.getCode())
+		{
+		case DIGIT0:
+			NumericalButtonPressed(0, display);
+			break;
+		case DIGIT1:
+			NumericalButtonPressed(1, display);
+			break;
+		case DIGIT2:
+			NumericalButtonPressed(2, display);
+			break;
+		case DIGIT3:
+			NumericalButtonPressed(3, display);
+			break;
+		case DIGIT4:
+			NumericalButtonPressed(4, display);
+			break;
+		case DIGIT5:
+			NumericalButtonPressed(5, display);
+			break;
+		case DIGIT6:
+			NumericalButtonPressed(6, display);
+			break;
+		case DIGIT7:
+			NumericalButtonPressed(7, display);
+			break;
+		case DIGIT8:
+			NumericalButtonPressed(8, display);
+			break;
+		case DIGIT9:
+			NumericalButtonPressed(9, display);
+			break;
+		case EQUALS: 
+			break; 
+		case ADD:
+			OperatorButtonPressed(Operator.Addition);
+			break;
+		case SUBTRACT: 
+			OperatorButtonPressed(Operator.Subtraction);
+			break; 
+		case MULTIPLY:
+			OperatorButtonPressed(Operator.Multiplication);
+			break;
+		case DIVIDE: 
+			OperatorButtonPressed(Operator.Division);
+			break; 
+		default: 
+			break;
+			
+		}
+	};
+	}
+	
+	// methods
+	// -------------------
+	
+	public void UpdateDisplay(TextField display) 
+	{
 		if (calculator.activeOperand == Operand.Left)
 			display.setText(Integer.toString(calculator.ConvertLeftOperand()));
 		else
 			display.setText(Integer.toString(calculator.ConvertRightOperand()));
+	}
+	
+	public void NumericalButtonPressed(int input_value, TextField display)
+	{
+		System.out.println("CalcApp::NumericalButtonPressed -> calling Calculator::AddOperatorDigit method");
+		calculator.AddOperatorDigit(input_value);
+		UpdateDisplay(display);
 	}
 	
 	public void OperatorButtonPressed(Operator input_operator) {
@@ -190,24 +297,34 @@ public class CalcApp extends Application {
 		calculator.SelectOperator(input_operator);
 	}
 	
-	public void DeleteButtonPressed()
+	public void DeleteButtonPressed(TextField display)
 	{
 		System.out.println("CalcApp::DeleteButtonPressed -> calling Calculator::DeleteDigit");
 		calculator.DeleteDigit();
+		UpdateDisplay(display);
 	}
 	
-	public void EqualButtonPressed(Text display)
+	public void ClearButtonPressed(TextField display) 
+	{
+		System.out.println("CalcApp::ClearButtonPressed ->  calling Calculator::Clear"); 
+		calculator.Clear();
+		display.setText("0");
+		
+	}
+	
+	public void SignButtonPressed(TextField display)
+	{
+		System.out.println("CalcApp::SignButtonPressed ->  calling Calculator::SetOperandSign"); 
+		calculator.SetOperandSign();
+		UpdateDisplay(display);
+	}
+	
+	public void EqualButtonPressed(TextField display)
 	{
 		System.out.println("CalcApp::EqualButtonPressed -> calling Calculator::SolveEquation method");
 		int solution = calculator.SolveEquation(); 
 		display.setText(Integer.toString(solution));
 	}
 	
-	public static void main(String[] args)
-	{
-		System.out.println("CalcApp::main-> Opening Calc App");
-		
-		launch(args); 
-	}
 
 }

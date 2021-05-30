@@ -25,11 +25,13 @@
 	
 }
 
-.text-id{
+#Display{
 	-fx-background-color: rgb(125,125,125);
 	-fx-text-fill : White;
+	-fx-font-size: 32pt;
    	-fx-border-color: Gray; 
    	-fx-pref-height: 100px;
+	-fx-pref-width: 400px;
    	-fx-border-color:  #808080;
    	-fx-border-width: 2pt;
 }
