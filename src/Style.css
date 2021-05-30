@@ -1,0 +1,35 @@
+.root{
+	-fx-background-color: #404040; 
+	-fx-font-size: 16pt;
+	-fx-font-weight: bold;
+	-fx-alignment:center;  
+	-fx-text-fill : White;	
+}
+
+.grid{
+
+}
+
+.button{
+	-fx-background-color: #202020;
+	-fx-margin: 500;
+	-fx-padding: 30;
+	-fx-text-fill : White;
+	-fx-pref-width: 100px;
+	-fx-pref-height: 100px; 
+	-fx-border-color:  #808080;
+}
+
+#Operator{
+	-fx-text-fill : #d3d3d3;
+	
+}
+
+.text-id{
+	-fx-background-color: rgb(125,125,125);
+	-fx-text-fill : White;
+   	-fx-border-color: Gray; 
+   	-fx-pref-height: 100px;
+   	-fx-border-color:  #808080;
+   	-fx-border-width: 2pt;
+}
