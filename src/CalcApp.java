@@ -287,7 +287,6 @@ public class CalcApp extends Application {
 		case DIVIDE: 
 			OperatorButtonPressed(Operator.Division);
 			break; 
-
 		case BACK_SPACE: 
 			DeleteButtonPressed(display);
 			break;
@@ -311,7 +310,7 @@ public class CalcApp extends Application {
 	public void NumericalButtonPressed(int input_value, TextField display)
 	{
 		System.out.println("CalcApp::NumericalButtonPressed -> calling Calculator::AddOperatorDigit method");
-		calculator.AddOperatorDigit(input_value);
+		calculator.AddOperandDigit(input_value);
 		UpdateDisplay(display);
 	}
 	

@@ -34,7 +34,7 @@ public class Calculator {
 		System.out.println("");	
 	}
 	
-	public void AddOperatorDigit(int input_value)
+	public void AddOperandDigit(int input_value)
 	{
 		if (this.activeOperand == Operand.Left) {
 			this.input_digits_left_operand.add(input_value);
