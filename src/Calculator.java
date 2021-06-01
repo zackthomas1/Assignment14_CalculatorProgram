@@ -70,6 +70,7 @@ public class Calculator {
 		Boolean fractional = false;
 		for(int i = 0; i < input_digits.size(); ++i)
 		{
+			// if decimal point
 			if (input_digits.get(i) == -1)
 			{
 				fractional = true; 
@@ -119,6 +120,7 @@ public class Calculator {
 		
 		for(int c = 0; c < strValue.length(); c++)
 		{
+			// if decimal point
 			if(strValue.charAt(c) == '.')
 				outputArray.add(-1); 
 			else

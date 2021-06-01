@@ -126,7 +126,7 @@ public class CalcApp extends Application {
 		inputsPane.add(btnDecimal, 1, 4); // column=1 row = 4
 		btnDecimal.setOnMouseClicked(e -> {
 			System.out.println("CalcApp::start-> btnDecimal pressed");
-			NumericalButtonPressed(-1, display);	
+			NumericalButtonPressed(-1, display);	// -1 represents a decimal point
 		});
 		
 		Button btnEqual = new Button("="); 
@@ -268,6 +268,10 @@ public class CalcApp extends Application {
 		case NUMPAD9: 
 		case DIGIT9:
 			NumericalButtonPressed(9, display);
+			break;
+		case PERIOD: 
+		case DECIMAL: 
+			NumericalButtonPressed(-1, display); // -1 represents a decimal point
 			break;
 		case ENTER:
 		case EQUALS: 
