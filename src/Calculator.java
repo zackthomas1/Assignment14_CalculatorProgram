@@ -18,6 +18,10 @@ public class Calculator {
 	private double solution = 0;
 	private ArrayList<Integer> input_digits_left_operand = new ArrayList<Integer>(); 
 	private ArrayList<Integer> input_digits_right_operand = new ArrayList<Integer>();
+	private Boolean fractional_active_left_operand = false; 
+	private Boolean fractional_active_right_operand = false;
+	
+	
 	private Operator operator = Operator.Addition; 
 	
 	public Operand activeOperand = Operand.Left;
@@ -36,15 +40,31 @@ public class Calculator {
 	
 	public void AddOperandDigit(int input_value)
 	{
-		if (this.activeOperand == Operand.Left) {
-			this.input_digits_left_operand.add(input_value);
-			System.out.print("Calculator::AddOperatorDigit -> adding " + input_value + "--> ");
-			this.input_digits_left_operand.forEach(digit -> System.out.print(digit + ", ")); System.out.println();
+		
+		if (this.activeOperand == Operand.Left)
+		{
+			if(input_value != -1 || this.fractional_active_left_operand == false) {
+				this.input_digits_left_operand.add(input_value);
+			}
+			
+			// 
+			if(input_value == -1) {
+				this.fractional_active_left_operand = true;
+			}
+		
+			System.out.print("Calculator::AddOperatorDigit -> adding " + input_value + "--> "); this.input_digits_left_operand.forEach(digit -> System.out.print(digit + ", ")); System.out.println();
 		}
-		else {
-			this.input_digits_right_operand.add(input_value);
-			System.out.print("Calculator::AddOperatorDigit -> adding " + input_value + "--> ");
-			this.input_digits_right_operand.forEach(digit -> System.out.print(digit + ", ")); System.out.println();
+		else 
+		{
+			if(input_value != -1 || this.fractional_active_right_operand == false) {
+				this.input_digits_right_operand.add(input_value);
+			}
+			
+			if(input_value == -1) {
+				this.fractional_active_right_operand = true;
+			}
+			
+			System.out.print("Calculator::AddOperatorDigit -> adding " + input_value + "--> "); this.input_digits_right_operand.forEach(digit -> System.out.print(digit + ", ")); System.out.println();
 		}
 	}
 	
@@ -159,6 +179,10 @@ public class Calculator {
 		{
 			if (this.input_digits_left_operand.size() > 0) 
 			{
+				// check if digit is a decimal
+				if(this.input_digits_left_operand.get(this.input_digits_left_operand.size() - 1) == -1)
+					this.fractional_active_left_operand = false;
+				
 				this.input_digits_left_operand.remove(this.input_digits_left_operand.size() - 1);
 			}
 			System.out.print("Calculator::DeleteDigit -> input_digits_left_operand: "); this.input_digits_left_operand.forEach(digit -> System.out.print(digit + ", ")); System.out.println();
@@ -167,6 +191,10 @@ public class Calculator {
 		{
 			if (this.input_digits_right_operand.size() > 0) 
 			{
+				// check if digit is a decimal
+				if(this.input_digits_right_operand.get(this.input_digits_right_operand.size() - 1) == -1)
+					this.fractional_active_right_operand = false;
+				
 				this.input_digits_right_operand.remove(this.input_digits_right_operand.size() - 1);
 			}
 			System.out.print("Calculator::DeleteDigit -> input_digits_right_operand: "); this.input_digits_right_operand.forEach(digit -> System.out.print(digit + ", ")); System.out.println();
@@ -183,6 +211,8 @@ public class Calculator {
 		this.right_sign = 1;	
 		this.input_digits_left_operand.clear();
 		this.input_digits_right_operand.clear();
+		this.fractional_active_left_operand = false; 
+		this.fractional_active_right_operand = false;
 		
 		this.activeOperand = Operand.Left;
 	}
