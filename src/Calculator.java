@@ -9,13 +9,13 @@ import java.util.ArrayList;
 
 public class Calculator {
 
-	private int left_operand = 0;
-	private int right_operand = 0;
+	private double left_operand = 0;
+	private double right_operand = 0;
 	
 	public int left_sign = 1;
 	public int right_sign = 1;
 	
-	private int solution = 0;
+	private double solution = 0;
 	private ArrayList<Integer> input_digits_left_operand = new ArrayList<Integer>(); 
 	private ArrayList<Integer> input_digits_right_operand = new ArrayList<Integer>();
 	private Operator operator = Operator.Addition; 
@@ -61,22 +61,57 @@ public class Calculator {
 		}
 	}
 	
-	private int DigitstoValue(ArrayList<Integer> input_digits_list, int sign) 
+	private double DigitstoValue(ArrayList<Integer> input_digits, int sign) 
 	{
+		ArrayList<Integer> integer_values = new ArrayList<Integer>();
+		ArrayList<Integer> fractional_values = new ArrayList<Integer>();
 		
-		int converted_value = 0;
-		for(int i = 0; i < input_digits_list.size(); ++i)
+		// sort input digits into integers and fractionals. ie values before and values after decimal point
+		Boolean fractional = false;
+		for(int i = 0; i < input_digits.size(); ++i)
 		{
-			converted_value += input_digits_list.get(i) * (Math.pow(10, (input_digits_list.size() - (i + 1)))); 
-			// System.out.println("Calculator::ConvertDigitstoValue -> converted value: " + converted_value + " input value:" + input_digits_list.get(i));
+			if (input_digits.get(i) == -1)
+			{
+				fractional = true; 
+				continue;
+			}
+			
+			if (fractional == false)
+			{
+				integer_values.add(input_digits.get(i));
+			}else {
+				fractional_values.add(input_digits.get(i));
+			}
+			
+		}
+
+		// convert integer values. ie value before decimal
+		double converted_integer_value = 0;
+		for(int i = 0; i < integer_values.size(); ++i)
+		{
+
+			converted_integer_value += integer_values.get(i) * (Math.pow(10, (integer_values.size() - (i + 1)))); 
+			// System.out.println("Calculator::ConvertDigitstoValue -> converted value: " + converted_integer_value + "input integer value:" + integer_values.get(i));
 		}
 		
+		// convert fractional values. ie value after decimal 
+		double converted_fractional_value = 0;
+		for(int i = fractional_values.size() - 1; i >= 0; --i)
+		{
+			converted_fractional_value += fractional_values.get(i) * (Math.pow(10, (-1 * (i + 1)))); 
+			// System.out.println("Calculator::ConvertDigitstoValue -> converted fractional value: " + converted_fractional_value + " input fractional value:" + fractional_values.get(i));
+		}
+		
+		System.out.println("Calculator::DigitstoValue -> integer value: " + converted_integer_value);
+		System.out.println("Calculator::DigitstoValue -> fractional value: " + converted_fractional_value);
+		
+		double converted_value = converted_integer_value + converted_fractional_value;
 		converted_value *= sign;
-		System.out.println("Calculator::ConvertDigitstoValue -> output value: " + converted_value);
+		System.out.println("Calculator::DigitstoValue -> output value: " + converted_value);
 		return converted_value;
 	}
 	
-	private ArrayList<Integer> ValuetoDigit(int operandValue) 
+	private ArrayList<Integer> ValuetoDigit(double operandValue) 
 	{
 		ArrayList<Integer> outputArray = new ArrayList<Integer>();
 		
@@ -84,23 +119,26 @@ public class Calculator {
 		
 		for(int c = 0; c < strValue.length(); c++)
 		{
-			outputArray.add(Integer.parseInt(Character.toString(strValue.charAt(c))));
+			if(strValue.charAt(c) == '.')
+				outputArray.add(-1); 
+			else
+				outputArray.add(Integer.parseInt(Character.toString(strValue.charAt(c))));
 		}
 	
 		System.out.print("Calculator::ValuetoDigit -> digit: "); outputArray.forEach(d -> System.out.print(d + ", ")); System.out.println();
 		return outputArray;
 	}
 	
-	public int ConvertLeftOperand() 
+	public double ConvertLeftOperand() 
 	{
-		int convertedValue = DigitstoValue(this.input_digits_left_operand, this.left_sign); 
+		double convertedValue = DigitstoValue(this.input_digits_left_operand, this.left_sign); 
 		System.out.println("Calculator::ConvertLeftOperand -> left operand: " + convertedValue);
 		return convertedValue; 
 	}
 	
-	public int ConvertRightOperand()
+	public double ConvertRightOperand()
 	{
-		int convertedValue = DigitstoValue(this.input_digits_right_operand, this.right_sign);
+		double convertedValue = DigitstoValue(this.input_digits_right_operand, this.right_sign);
 		System.out.println("Calculator::ConvertRightOperand -> right operand: " + convertedValue);
 		return convertedValue;
 	}
@@ -147,42 +185,42 @@ public class Calculator {
 		this.activeOperand = Operand.Left;
 	}
 	
-	public int Addition(int left_operand, int right_operand)
+	public double Addition(double left_operand, double right_operand)
 	{
 		System.out.println("Calculator::Addition-> equation: " + left_operand + " + " + right_operand + " = " + (left_operand + right_operand));
 		return left_operand + right_operand;
 	}
 	
-	public int Subtraction(int left_operand, int right_operand)
+	public double Subtraction(double left_operand, double right_operand)
 	{
 		System.out.println("Calculator::Addition-> equation: " + left_operand + " - " + right_operand + " = " + (left_operand - right_operand));
 		return left_operand - right_operand;
 	}
 	
-	public int Multiplication(int left_operand, int right_operand)
+	public double Multiplication(double left_operand, double right_operand)
 	{
 		System.out.println("Calculator::Multiplication-> equation: " + left_operand + " * " + right_operand + " = " + (left_operand * right_operand));
 		return left_operand * right_operand;
 	}
 	
-	public int Division(int left_operand, int right_operand)
+	public double Division(double left_operand, double right_operand)
 	{
 		System.out.println("Calculator::Division-> equation: " + left_operand + " / " + right_operand + " = " + (left_operand / right_operand));
 		return left_operand / right_operand;
 	}
 	
-	public int Modulus(int left_operand, int right_operand) {
+	public double Modulus(double left_operand, double right_operand) {
 		System.out.println("Calculator::Modulus-> equation: " + left_operand + " % " + right_operand + " = " + (left_operand / right_operand));
 		return left_operand % right_operand;
 	}
 	
-	public int SolveEquation()
+	public double SolveEquation()
 	{
 		
 		this.left_operand = ConvertLeftOperand();
 		this.right_operand = ConvertRightOperand(); 
 			
-		int solution = 0;
+		double solution = 0;
 		switch(this.operator)
 		{
 		case Addition: 

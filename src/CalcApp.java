@@ -126,6 +126,7 @@ public class CalcApp extends Application {
 		inputsPane.add(btnDecimal, 1, 4); // column=1 row = 4
 		btnDecimal.setOnMouseClicked(e -> {
 			System.out.println("CalcApp::start-> btnDecimal pressed");
+			NumericalButtonPressed(-1, display);	
 		});
 		
 		Button btnEqual = new Button("="); 
@@ -302,9 +303,9 @@ public class CalcApp extends Application {
 	public void UpdateDisplay(TextField display) 
 	{
 		if (calculator.activeOperand == Operand.Left)
-			display.setText(Integer.toString(calculator.ConvertLeftOperand()));
+			display.setText(Double.toString(calculator.ConvertLeftOperand()));
 		else
-			display.setText(Integer.toString(calculator.ConvertRightOperand()));
+			display.setText(Double.toString(calculator.ConvertRightOperand()));
 	}
 	
 	public void NumericalButtonPressed(int input_value, TextField display)
@@ -344,8 +345,8 @@ public class CalcApp extends Application {
 	public void EqualButtonPressed(TextField display)
 	{
 		System.out.println("CalcApp::EqualButtonPressed -> calling Calculator::SolveEquation method");
-		int solution = calculator.SolveEquation(); 
-		display.setText(Integer.toString(solution));
+		double solution = calculator.SolveEquation(); 
+		display.setText(Double.toString(solution));
 	}
 	
 
